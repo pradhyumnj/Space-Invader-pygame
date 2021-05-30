@@ -22,6 +22,7 @@ playerY = 480
 delta = 3
 playerX_change = 0
 playerY_change = 0
+player_score = 0
 
 # Initializing Ememy
 enemyImg = pygame.image.load('spaceship2.png')
@@ -29,6 +30,7 @@ enemyX = 370
 enemyY = 64
 enemyX_change = 0
 enemyY_change = 0
+enemy_score = 0
 
 # Initializing player bullet
 bulletImg = pygame.image.load('bullet.png')
@@ -61,9 +63,6 @@ def fire1(x, y):
     global bullet1_state
     bullet1_state = 'fire'   
     screen.blit(bullet1Img, (x+16, y+10))
-
- 
-
 
 #Game loop
 running = True
@@ -111,7 +110,7 @@ while running:
                 enemyY_change -= delta
             if event.key == pygame.K_DOWN:
                 enemyY_change += delta
-            if event.key == pygame.K_r:
+            if event.key == pygame.K_PERIOD:
                 fire1(enemyX,enemyY)
         if event.type == pygame.KEYUP:
             if event.key in (pygame.K_RIGHT, pygame.K_LEFT):
@@ -163,4 +162,10 @@ while running:
     if bullet1Y > screenY:
         bullet1_state = 'ready'
 
+    if ((bulletX-enemyX)**2 + (bulletY-enemyY)**2)**0.5 < 30:
+        bullet_state = 'ready'
+        player_score += 1
+    if ((bullet1X-playerX)**2 + (bullet1Y-playerY)**2)**0.5 < 30:
+        bullet1_state = 'ready'   
+        enemy_score += 1
     pygame.display.update()
