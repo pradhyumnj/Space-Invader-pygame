@@ -34,16 +34,13 @@ enemyY_change = 0
 bulletImg = pygame.image.load('bullet.png')
 bulletX = 370
 bulletY = 480
-bulletX_change = 0
-bulletY_change = 10
+bullet_delta = 5
 bullet_state = 'ready'
 
 # Initializing enemy bullet
 bullet1Img = pygame.image.load('bullet1.png')
 bullet1X = 370
-bullet1Y = 480
-bullet1X_change = 0
-bullet1Y_change = 10
+bullet1Y = 64
 bullet1_state = 'ready'
 
 # Draw player
@@ -61,9 +58,10 @@ def fire(x, y):
     screen.blit(bulletImg, (x+16, y+10))
 
 def fire1(x, y):
-    global bullet_state
-    bullet_state = 'fire'  
+    global bullet1_state
+    bullet1_state = 'fire'   
     screen.blit(bullet1Img, (x+16, y+10))
+
  
 
 
@@ -74,6 +72,13 @@ while running:
     screen.fill((0,0,0))
     screen.blit(background,(0,0 ))
     # For quitting
+    if bullet_state is 'ready':
+        bulletY = playerY
+        bulletX = playerX
+    if bullet1_state is 'ready':
+        bullet1Y = enemyY
+        bullet1X = enemyX
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -146,7 +151,16 @@ while running:
 
     #Firing 
     if bullet_state is 'fire':
-        fire(playerX, playerY)
+        fire(bulletX, bulletY)
+        bulletY -= bullet_delta
     if bullet1_state is 'fire':
-        fire1(enemyX, enemyY)    
+        fire1(bullet1X, bullet1Y)  
+        bullet1Y += bullet_delta 
+        
+    #reloading
+    if bulletY < 0:
+        bullet_state = 'ready'
+    if bullet1Y > screenY:
+        bullet1_state = 'ready'
+
     pygame.display.update()
