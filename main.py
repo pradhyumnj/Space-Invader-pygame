@@ -1,4 +1,6 @@
 import pygame
+from pygame import mixer
+
 #from pygame.constants import K_LEFT
 
 # Mandatory initialization 
@@ -9,6 +11,10 @@ screenX = 800
 screenY = 600
 background = pygame.image.load('background.png')
 screen = pygame.display.set_mode((screenX, screenY))
+
+# Set music
+mixer.music.load()
+mixer.music.play(-1)
 
 # Set Window title and icon
 pygame.display.set_caption("Space Invaders")
@@ -22,7 +28,7 @@ playerY = 480
 delta = 3
 playerX_change = 0
 playerY_change = 0
-player_score = 0
+player_health = 10
 
 # Initializing Ememy
 enemyImg = pygame.image.load('spaceship2.png')
@@ -30,7 +36,7 @@ enemyX = 370
 enemyY = 64
 enemyX_change = 0
 enemyY_change = 0
-enemy_score = 0
+enemy_health = 10
 
 # Initializing player bullet
 bulletImg = pygame.image.load('bullet.png')
@@ -63,6 +69,15 @@ def fire1(x, y):
     global bullet1_state
     bullet1_state = 'fire'   
     screen.blit(bullet1Img, (x+16, y+10))
+
+# Displaying health
+font = pygame.font.Font('freesansbold.ttf',32)
+def p1_health(x = screenX - 190 ,y = screenY - 50):
+    health = font.render(f'Health : {player_health}', True, (255,255,255))
+    screen.blit(health, (x,y))
+def p2_health(x = 10,y = 10):
+    health = font.render(f'Health : {enemy_health}', True, (255,255,255))
+    screen.blit(health, (x,y))
 
 #Game loop
 running = True
@@ -127,8 +142,8 @@ while running:
         playerY = 0
     if playerX > screenX - 64:
         playerX = screenX - 64
-    if playerY < 0:
-        playerY = 0
+    if playerY < screenY/2 + 15:
+        playerY = screenY/2 + 15
     if playerY > screenY - 64:
         playerY = screenY - 64
     player(playerX,playerY)
@@ -144,8 +159,8 @@ while running:
         enemyX = screenX - 64
     if enemyY < 0:
         enemyY = 0
-    if enemyY > screenY - 64:
-        enemyY = screenY - 64
+    if enemyY > screenY/2 - 64 - 15:
+        enemyY = screenY/2 - 64 - 15
     enemy(enemyX,enemyY)
 
     #Firing 
@@ -164,8 +179,12 @@ while running:
 
     if ((bulletX-enemyX)**2 + (bulletY-enemyY)**2)**0.5 < 30:
         bullet_state = 'ready'
-        player_score += 1
+        enemy_health -= 1
     if ((bullet1X-playerX)**2 + (bullet1Y-playerY)**2)**0.5 < 30:
         bullet1_state = 'ready'   
-        enemy_score += 1
+        player_health -= 1
+
+    p1_health()
+    p2_health()
+
     pygame.display.update()
