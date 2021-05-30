@@ -1,5 +1,5 @@
 import pygame
-from pygame.constants import K_LEFT
+#from pygame.constants import K_LEFT
 
 # Mandatory initialization 
 pygame.init()
@@ -30,6 +30,22 @@ enemyY = 64
 enemyX_change = 0
 enemyY_change = 0
 
+# Initializing player bullet
+bulletImg = pygame.image.load('bullet.png')
+bulletX = 370
+bulletY = 480
+bulletX_change = 0
+bulletY_change = 10
+bullet_state = 'ready'
+
+# Initializing enemy bullet
+bullet1Img = pygame.image.load('bullet1.png')
+bullet1X = 370
+bullet1Y = 480
+bullet1X_change = 0
+bullet1Y_change = 10
+bullet1_state = 'ready'
+
 # Draw player
 def player(x,y):
     screen.blit(playerImg, (x, y))
@@ -37,6 +53,18 @@ def player(x,y):
 # Draw Enemy
 def enemy(x,y):
     screen.blit(enemyImg, (x, y))
+
+# Fire player bullet
+def fire(x, y):
+    global bullet_state
+    bullet_state = 'fire' 
+    screen.blit(bulletImg, (x+16, y+10))
+
+def fire1(x, y):
+    global bullet_state
+    bullet_state = 'fire'  
+    screen.blit(bullet1Img, (x+16, y+10))
+ 
 
 
 #Game loop
@@ -60,7 +88,9 @@ while running:
                 playerY_change -= delta
             if event.key == pygame.K_s:
                 playerY_change += delta
-        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_SPACE:
+                fire(playerX,playerY)
+        if event.type == pygame.KEYUP: 
             if event.key in (pygame.K_d, pygame.K_a):
                 playerX_change = 0  
             if event.key in (pygame.K_w, pygame.K_s):   
@@ -76,6 +106,8 @@ while running:
                 enemyY_change -= delta
             if event.key == pygame.K_DOWN:
                 enemyY_change += delta
+            if event.key == pygame.K_r:
+                fire1(enemyX,enemyY)
         if event.type == pygame.KEYUP:
             if event.key in (pygame.K_RIGHT, pygame.K_LEFT):
                 enemyX_change = 0  
@@ -111,4 +143,10 @@ while running:
     if enemyY > screenY - 64:
         enemyY = screenY - 64
     enemy(enemyX,enemyY)
+
+    #Firing 
+    if bullet_state is 'fire':
+        fire(playerX, playerY)
+    if bullet1_state is 'fire':
+        fire1(enemyX, enemyY)    
     pygame.display.update()
