@@ -1,8 +1,6 @@
 import pygame
 from pygame import mixer
 
-#from pygame.constants import K_LEFT
-
 # Mandatory initialization 
 pygame.init()
 
@@ -13,8 +11,10 @@ background = pygame.image.load('background.png')
 screen = pygame.display.set_mode((screenX, screenY))
 
 # Set music
-mixer.music.load()
+mixer.music.load('background.wav')
 mixer.music.play(-1)
+bullet_sound = mixer.Sound('laser.wav')
+explosion_sound = mixer.Sound('explosion.wav')
 
 # Set Window title and icon
 pygame.display.set_caption("Space Invaders")
@@ -70,6 +70,13 @@ def fire1(x, y):
     bullet1_state = 'fire'   
     screen.blit(bullet1Img, (x+16, y+10))
 
+# Game Over 
+over = pygame.font.Font('freesansbold.ttf',1000)
+def game_over(x = screenX/2 - 200, y = screenY/2):
+    game_over_text = font.render(f'Game Over', True, (255,0,0))
+    screen.blit(game_over_text, (x,y))
+
+
 # Displaying health
 font = pygame.font.Font('freesansbold.ttf',32)
 def p1_health(x = screenX - 190 ,y = screenY - 50):
@@ -82,6 +89,7 @@ def p2_health(x = 10,y = 10):
 #Game loop
 running = True
 while running:
+
     # Screen color and background
     screen.fill((0,0,0))
     screen.blit(background,(0,0 ))
@@ -108,6 +116,8 @@ while running:
             if event.key == pygame.K_s:
                 playerY_change += delta
             if event.key == pygame.K_SPACE:
+                if bullet_state is 'ready':
+                    bullet_sound.play()
                 fire(playerX,playerY)
         if event.type == pygame.KEYUP: 
             if event.key in (pygame.K_d, pygame.K_a):
@@ -126,7 +136,10 @@ while running:
             if event.key == pygame.K_DOWN:
                 enemyY_change += delta
             if event.key == pygame.K_PERIOD:
+                if bullet1_state is 'ready':
+                    bullet_sound.play()
                 fire1(enemyX,enemyY)
+
         if event.type == pygame.KEYUP:
             if event.key in (pygame.K_RIGHT, pygame.K_LEFT):
                 enemyX_change = 0  
@@ -179,12 +192,23 @@ while running:
 
     if ((bulletX-enemyX)**2 + (bulletY-enemyY)**2)**0.5 < 30:
         bullet_state = 'ready'
+        explosion_sound.play()
         enemy_health -= 1
     if ((bullet1X-playerX)**2 + (bullet1Y-playerY)**2)**0.5 < 30:
-        bullet1_state = 'ready'   
+        bullet1_state = 'ready'  
+        explosion_sound.play()
         player_health -= 1
+
 
     p1_health()
     p2_health()
+    i = 0
+    if i is 0:
+        while (player_health is 0 or enemy_health is 0):
+            game_over()
+            pygame.display.update()
+            i += 1
+            if i == 10:
+                break
 
     pygame.display.update()
