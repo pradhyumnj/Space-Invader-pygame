@@ -8,22 +8,22 @@ pygame.init()
 # Set Screen
 screenX = 800
 screenY = 600
-background = pygame.image.load('background.png')
+background = pygame.image.load('media/background.png')
 screen = pygame.display.set_mode((screenX, screenY))
 
 # Set music
-mixer.music.load('background.wav')
+mixer.music.load('media/background.wav')
 mixer.music.play(-1)
-bullet_sound = mixer.Sound('laser.wav')
-explosion_sound = mixer.Sound('explosion.wav')
+bullet_sound = mixer.Sound('media/laser.wav')
+explosion_sound = mixer.Sound('media/explosion.wav')
 
 # Set Window title and icon
-pygame.display.set_caption("Space Invaders")
-icon = pygame.image.load('ufo.png')
+pygame.display.set_caption("media/Space Invaders")
+icon = pygame.image.load('media/ufo.png')
 pygame.display.set_icon(icon)
 
 # Initializing Player
-playerImg = pygame.image.load('spaceship.png')
+playerImg = pygame.image.load('media/spaceship.png')
 playerX = 370
 playerY = 480
 delta = 3
@@ -32,7 +32,7 @@ playerY_change = 0
 player_health = 10
 
 # Initializing Ememy
-enemyImg = pygame.image.load('spaceship2.png')
+enemyImg = pygame.image.load('media/spaceship2.png')
 enemyX = 370
 enemyY = 64
 enemyX_change = 0
@@ -40,14 +40,14 @@ enemyY_change = 0
 enemy_health = 10
 
 # Initializing player bullet
-bulletImg = pygame.image.load('bullet.png')
+bulletImg = pygame.image.load('media/bullet.png')
 bulletX = 370
 bulletY = 480
 bullet_delta = 5
 bullet_state = 'ready'
 
 # Initializing enemy bullet
-bullet1Img = pygame.image.load('bullet1.png')
+bullet1Img = pygame.image.load('media/bullet1.png')
 bullet1X = 370
 bullet1Y = 64
 bullet1_state = 'ready'
@@ -214,3 +214,4 @@ while running:
             time.sleep(1)
             exit()
     pygame.display.update()
+
