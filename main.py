@@ -1,5 +1,6 @@
 import pygame
 from pygame import mixer
+import time
 
 # Mandatory initialization 
 pygame.init()
@@ -94,10 +95,10 @@ while running:
     screen.fill((0,0,0))
     screen.blit(background,(0,0 ))
     # For quitting
-    if bullet_state is 'ready':
+    if bullet_state == 'ready':
         bulletY = playerY
         bulletX = playerX
-    if bullet1_state is 'ready':
+    if bullet1_state == 'ready':
         bullet1Y = enemyY
         bullet1X = enemyX
 
@@ -116,7 +117,7 @@ while running:
             if event.key == pygame.K_s:
                 playerY_change += delta
             if event.key == pygame.K_SPACE:
-                if bullet_state is 'ready':
+                if bullet_state == 'ready':
                     bullet_sound.play()
                 fire(playerX,playerY)
         if event.type == pygame.KEYUP: 
@@ -136,7 +137,7 @@ while running:
             if event.key == pygame.K_DOWN:
                 enemyY_change += delta
             if event.key == pygame.K_PERIOD:
-                if bullet1_state is 'ready':
+                if bullet1_state == 'ready':
                     bullet_sound.play()
                 fire1(enemyX,enemyY)
 
@@ -177,10 +178,10 @@ while running:
     enemy(enemyX,enemyY)
 
     #Firing 
-    if bullet_state is 'fire':
+    if bullet_state == 'fire':
         fire(bulletX, bulletY)
         bulletY -= bullet_delta
-    if bullet1_state is 'fire':
+    if bullet1_state == 'fire':
         fire1(bullet1X, bullet1Y)  
         bullet1Y += bullet_delta 
         
@@ -203,12 +204,13 @@ while running:
     p1_health()
     p2_health()
     i = 0
-    if i is 0:
-        while (player_health is 0 or enemy_health is 0):
+    if i == 0:
+        while (player_health == 0 or enemy_health == 0):
             game_over()
             pygame.display.update()
             i += 1
             if i == 10:
                 break
-
+            time.sleep(1)
+            exit()
     pygame.display.update()
