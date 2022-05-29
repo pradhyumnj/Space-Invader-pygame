@@ -1,3 +1,7 @@
+
+![demo1](https://github.com/pradhyumnj/Space-Invader-pygame/blob/master/media/pic1.png)
+![demo2](https://github.com/pradhyumnj/Space-Invader-pygame/blob/master/media/pic2.png)
+
 # Installation
 
 1. Clone this repository <br>
